@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+ <title>Duane M. Moody</title>
+ <link href="http://blog.penso.info/atom.xml" rel="self"/>
+ <link href="http://blog.penso.info/"/>
+ <updated>2015-09-05T18:15:55-07:00</updated>
+ <id>http://blog.penso.info/</id>
+ <author>
+   <name>Duane M. Moody</name>
+   <email>dmmoody@gmail.com</email>
+	 <uri>http://blog.penso.info</uri>
+ </author>
+ 
+</feed>

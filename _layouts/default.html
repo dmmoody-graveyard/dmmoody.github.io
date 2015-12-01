@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		
+		{% if page.title %}
+		<title>{{ page.title }} — Duane M. Moody</title>
+		{% else %}
 		<title>Duane M. Moody</title>
-		
+		{% endif %}
 
 		<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" />
 		<link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.min.css" rel="stylesheet" />
@@ -13,7 +15,7 @@
 		<link href="/css/pygments.min.css" rel="stylesheet" />
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content=""/>
+		<meta name="keywords" content="{{page.categories | join: ', '}}"/>
 		<meta charset="utf-8">
 		<link href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" rel="icon" type="image/x-icon" />
 
@@ -24,37 +26,69 @@
 		<link rel="alternate" type="application/rss+xml" title="RSS Feed" href="/feed.xml" />
 
 
-		<meta content="Duane M. Moody" property="og:site_name" />
+		<meta content="{{ site.title }}" property="og:site_name" />
 
-		
-		<meta content="Duane M. Moody" property="og:title" />
-		<meta property="twitter:title" content="Duane M. Moody" />
-		
+		{% if page.title %}
+		<meta content="{{ page.title | escape }}" property="og:title" />
+		<meta property="twitter:title" content="{{ page.title | escape }}" />
+		{% else %}
+		<meta content="{{ site.title | escape }}" property="og:title" />
+		<meta property="twitter:title" content="{{ site.title | escape }}" />
+		{% endif %}
 
-		
+		{% if page.title %}
+		<meta content="article" property="og:type" />
+		{% else %}
 		<meta content="website" property="og:type" />
-		
+		{% endif %}
 
-		
-		<meta content="I&#39;m a Software Developer." property="og:description" />
-		<meta property="twitter:description" content="I&#39;m a Software Developer." />
-		<meta content="I&#39;m a Software Developer." property="description" />
-		
+		{% if page.description %}
+		<meta content="{{ page.description | escape }}" property="og:description" />
+		<meta property="twitter:description" content="{{ page.description | escape }}" />
+		<meta content="{{ page.description | escape }}" property="description" />
+		{% elsif page.content %}
+		<meta content="{{ page.content | strip_html | truncate: 300 | strip_newlines_with_space | escape }}" property="og:description" />
+		<meta property="twitter:description" content="{{ page.content | strip_html | truncate: 200 | | strip_newlines_with_space | escape }}" />
+		{% else %}
+		<meta content="{{ site.description | escape }}" property="og:description" />
+		<meta property="twitter:description" content="{{ site.description | escape }}" />
+		{% endif %}
 
-		
-		<meta content="http://blog.penso.info/index.html" property="og:url" />
-		
+		{% if page.url %}
+		<meta content="{{ site.url }}{{ page.url }}" property="og:url" />
+		{% endif %}
 
-		
+		{% if page.date %}
+		<meta content="{{ page.date | date_to_xmlschema }}" property="article:published_time" />
+		<meta content="{{ site.url }}/contact.html" property="article:author" />
+
+		<meta property="twitter:card" content="summary" />
+		<meta property="twitter:site" content="@duanemmoody" />
+
+		<meta property="twitter:creator" content="@duanemmoody" />
+		{% endif %}
 
 		<meta name="author" content="Duane M. Moody" />
 
-		
-		
-		
-		
-		
-		
+		{% if page.photo_social %}
+		  <meta content="{{ page.photo_social }}" property="og:image" />
+		  <meta property="twitter:image:src" content="{{ page.photo_social }}" />
+		{% else %}
+		{% if page.photo %}
+		<meta content="{{ page.photo }}" property="og:image" />
+		<meta property="twitter:image:src" content="{{ page.photo }}" />
+		{% else %}
+		{% if page.image %}
+		<meta content="{{ site.url }}/assets/img/posts/{{ page.image }}" property="og:image" />
+		<meta property="twitter:image:src" content="{{ site.url }}/assets/img/posts/{{ page.image }}" />
+		{% endif %}
+		{% endif %}
+		{% endif %}
+		{% if page.categories %}
+		{% for category in page.categories limit:1 %}
+		<meta content="{{ category }}" property="article:section" />
+		{% endfor %}
+		{% endif %}
 	</head>
 	<body>
 			<div class="top_name">
@@ -71,27 +105,14 @@
 				<div class="navbartop">
 					<div class="pull-right nolinkcolor header">
 						<ul class="nav nav-pills">
-							
-							
-							
-							<li><a href="/about.html">About</a></li>
-							
-							
-							
-							
-							<li><a href="/archive.html">Archive</a></li>
-							
-							
-							
-							
-							<li><a href="/contact.html">Contact</a></li>
-							
-							
-							
-							
-							<li><a href="/hire.html">Hire</a></li>
-							
-							
+							{% for node in site.toplinks %}
+							{% capture node_name %}/{{ node }}.html{% endcapture %}
+							{% if node_name == page.url %}
+							<li class="active"><a href="/{{node}}.html" class="active">{{node | capitalize}}</a></li>
+							{% else %}
+							<li><a href="/{{node}}.html">{{node | capitalize}}</a></li>
+							{% endif %}
+							{% endfor %}
 
 							<li>
 							<a href="http://twitter.com/duanemmoody">@duanemmoody</a>
@@ -110,15 +131,7 @@
 
 		<div class="container-narrow">
 			<div id="website-content">
-				<div itemscope itemtype="http://schema.org/Blog">
-  
-</ul>
-</div>
-
-<div class="archive_title">
-	<h3><a href="/archive.html">Archive</a></h3>
-</div>
-
+				{{ content }}
 			</div>
 
 			<div class="row social_icons">

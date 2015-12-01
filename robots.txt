@@ -1,0 +1,9 @@
+Sitemap: http://blog.penso.info/sitemap.xml
+
+User-agent: *
+Disallow: /img/
+Disallow: /css/
+Disallow: /font/
+Disallow: /js/
+Disallow: /less/
+Disallow: /sass/
